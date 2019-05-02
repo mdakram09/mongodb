@@ -31,6 +31,7 @@ db.summaries.insertOne(
 	}
 )
 
+db.patients.aggregate([{$lookup: {from: "summaries", localField: "summary", foreignField: "_id", as: "summary"}}])
 
 // ONE TO MANY
 
@@ -137,3 +138,5 @@ db.products.insertMany(
 		}
 	]
 )
+
+db.users.aggregate([{$lookup: {from: "products", localField: "order", foreignField: "_id", as: "order"}}])

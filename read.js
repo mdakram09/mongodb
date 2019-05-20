@@ -40,3 +40,20 @@ db.movies.find({$expr: { $gt: ["$runtime", "$id"] }}).pretty()
 
 //If rating is greater than 9 we want the movies with 1 million or more visitors, else the number of visitors has to be grater or equal to the number of expected visitors.
 db.boxOffices.find({$expr: {$lt: [{$cond: {if: {$gt: ["$meta.rating", 9]}, then: 1000000, else: "$expectedVisitors"}}, "$visitors"] }})
+
+// all movies with exactly 3 genres
+db.movies.find({genres: {$size: 3}}).pretty()
+
+// all movies that contain Thriller and Action in the genres array
+db.movies.find({genres: {$all: ["Thriller", "Action"]}}).pretty()
+
+// sort the find result by rating average and runtime
+db.movies.find().sort({"rating.average": -1, "runtime": 1}).pretty()
+
+// sort, skip and then limit the result
+db.movies.find().sort({"rating.average": -1, "runtime": 1}).skip(100).limit(10).pretty()
+
+let cursor = db.movies.find()
+cursor.next()
+cursor.forEach(doc => print(doc.name))
+
